@@ -1,70 +1,107 @@
-// LENIS
+// Initialize a new Lenis instance for smooth scrolling
 const lenis = new Lenis({
-	anchors: true,
+	autoRaf: true,
+	// Ajuste global (suave):
+	speed: 1,
+	damping: 0.1,
 	lerp: 0.1,
-	wheelMultiplier: 1,
-	gestureOrientation: "vertical",
+	anchors: true,
 });
 
-// Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
-lenis.on("scroll", ScrollTrigger.update);
+// ACCORDIONS
+document.querySelectorAll(".accordion_toggle_heading").forEach((heading) => {
+	heading.addEventListener("click", () => {
+		const content = heading.nextElementSibling;
+		if (!content || !content.classList.contains("accordion_content_wrap")) return;
 
-// Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
-// This ensures Lenis's smooth scroll animation updates on each GSAP tick
-gsap.ticker.add((time) => {
-	lenis.raf(time * 1000); // Convert time from seconds to milliseconds
-});
+		const icon = heading.querySelector(".accordion_toggle_icon");
 
-// Disable lag smoothing in GSAP to prevent any delay in scroll animations
-gsap.ticker.lagSmoothing(0);
+		// Fecha todos os outros
+		document.querySelectorAll(".accordion_content_wrap.open").forEach((openItem) => {
+			if (openItem !== content) {
+				openItem.classList.remove("open");
 
-// =================================================================
-
-// Disables RC on Images
-$("img").bind("contextmenu", function (e) {
-	return false;
-});
-// Disables RC on Lightboxes
-$(document).on("contextmenu", "img", function () {
-	return false;
-});
-
-// PAGE TRANSITION
-gsap.to(".transition", {
-	backgroundColor: "#E3DFD6",
-	opacity: 0,
-	duration: 0.8,
-	onComplete: () => {
-		gsap.set(".transition", {
-			display: "none",
-			backgroundColor: "transparent",
+				const otherHeading = openItem.previousElementSibling;
+				const otherIcon = otherHeading?.querySelector(".accordion_toggle_icon");
+				if (otherIcon) otherIcon.classList.remove("rotated");
+			}
 		});
+
+		const isOpen = content.classList.contains("open");
+
+		// Alterna o atual
+		content.classList.toggle("open");
+
+		if (icon) {
+			icon.classList.toggle("rotated", !isOpen);
+		}
+	});
+});
+
+// SWIPERS
+var swiperHeroThumbs = new Swiper(".swiper-hero_thumbs", {
+	spaceBetween: 0,
+	slidesPerView: 1,
+	freeMode: true,
+	watchSlidesProgress: true,
+	navigation: {
+		nextEl: ".hero-btn-next",
+		// prevEl: ".hero-btn-prev",
+	},
+});
+var swiperHero = new Swiper(".hero-bg-slider", {
+	slidesPerView: 1,
+	loop: true,
+	spaceBetween: 0,
+	effect: "fade",
+	autoplay: {
+		delay: 6000,
+		disableOnInteraction: false,
+	},
+	thumbs: {
+		swiper: swiperHeroThumbs,
 	},
 });
 
-$(document).ready(function () {
-	$("a").on("click", function (e) {
-		if ($(this).prop("hostname") === window.location.host && $(this).attr("href").indexOf("#") === -1 && $(this).attr("target") !== "_blank") {
-			e.preventDefault();
-			let destination = $(this).attr("href");
-			gsap.set(".transition", {
-				display: "block",
-			});
-			gsap.fromTo(
-				".transition",
-				{
-					backgroundColor: "transparent",
-					opacity: 0,
-				},
-				{
-					backgroundColor: "#E3DFD6",
-					opacity: 1,
-					duration: 0.8,
-					onComplete: () => {
-						window.location = destination;
-					},
-				}
-			);
+var swiper = new Swiper(".swiper_products-featured", {
+	slidesPerView: "auto",
+	spaceBetween: 0,
+	loop: true,
+	createElements: true,
+	pagination: true,
+	autoplay: false,
+	pagination: {
+		el: ".swiper-pagination",
+		type: "progressbar",
+	},
+	navigation: {
+		nextEl: ".slide-button-next",
+		prevEl: ".slide-button-prev",
+	},
+});
+
+var swiperGallery = new Swiper(".product-gallery", {
+	slidesPerView: "auto",
+	spaceBetween: 0,
+	loop: false,
+	createElements: true,
+	watchSlidesProgress: true,
+	navigation: {
+		nextEl: ".btn-gallery_left",
+		prevEl: ".btn-gallery_right",
+	},
+});
+
+swiperGallery.on("progress", () => {
+	swiperGallery.slides.forEach((slide) => {
+		// progress:
+		//  0   = ativo
+		// < 0  = já passou
+		// > 0  = próximo
+		if (slide.progress < 0) {
+			slide.classList.add("is-past");
+		} else {
+			slide.classList.remove("is-past");
 		}
 	});
 });
