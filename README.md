@@ -15,34 +15,6 @@ Este projeto foi desenvolvido pela [UWEX Design](https://uwex.com.br), agência 
 - Lenis (Smooth scroll)
 - Fancybox (Lightbox)
 
-## Estrutura do Projeto
-
-```
-ominic/
-├── dist/                 # Arquivos compilados
-│   ├── css/             # CSS minificado
-│   ├── js/              # JavaScript minificado
-│   └── index.html       # HTML de produção
-├── src/                 # Arquivos fonte
-│   ├── scss/            # Arquivos SCSS
-│   └── js/              # JavaScript fonte
-└── gulpfile.js          # Configuração do Gulp
-```
-
-## Desenvolvimento Local
-
-### Instalação
-
-```bash
-npm install
-```
-
-### Build
-
-```bash
-gulp
-```
-
 ## Contato
 
 **UWEX Design**
