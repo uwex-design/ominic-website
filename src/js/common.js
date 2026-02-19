@@ -105,3 +105,17 @@ swiperGallery.on("progress", () => {
 		}
 	});
 });
+
+// DOMECTIC SLIDER
+var swiper = new Swiper(".swiper_dometic", {
+	slidesPerView: "auto",
+	spaceBetween: 0,
+	loop: false,
+	createElements: false,
+	pagination: false,
+	autoplay: false,
+	navigation: {
+		nextEl: ".dometic-slider_nav-btn_next",
+		prevEl: ".dometic-slider_nav-btn_prev",
+	},
+});
