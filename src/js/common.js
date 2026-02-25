@@ -100,7 +100,7 @@ var swiperGallery = new Swiper(".product-gallery", {
 
 swiperGallery.on("progress", () => {
 	swiperGallery.slides.forEach((slide) => {
-		// progress:
+		// Progress:
 		//  0   = ativo
 		// < 0  = já passou
 		// > 0  = próximo

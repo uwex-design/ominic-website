@@ -4,6 +4,7 @@ const uglifycss = require("gulp-uglifycss");
 const rename = require("gulp-rename");
 const terser = require("gulp-terser");
 const concat = require("gulp-concat");
+const browserSync = require("browser-sync").create();
 
 // Configuração das bibliotecas de terceiros
 const libsConfig = {
@@ -66,7 +67,8 @@ const minifyCommonJs = () => {
 	return src("./src/js/common.js", { sourcemaps: true })
 		.pipe(terser())
 		.pipe(rename("common.min.js"))
-		.pipe(dest("./dist/js", { sourcemaps: true }));
+		.pipe(dest("./dist/js", { sourcemaps: true }))
+		.pipe(browserSync.stream());
 };
 
 // Minificar JS das páginas
@@ -78,7 +80,30 @@ const minifyPagesJs = () => {
 				path.basename = path.basename + ".min";
 			}),
 		)
-		.pipe(dest("./dist/js/pages", { sourcemaps: true }));
+		.pipe(dest("./dist/js/pages", { sourcemaps: true }))
+		.pipe(browserSync.stream());
+};
+
+// Servidor local com CORS habilitado
+const serve = (cb) => {
+	browserSync.init({
+		server: {
+			baseDir: "./dist",
+			middleware: [
+				function (req, res, next) {
+					res.setHeader("Access-Control-Allow-Origin", "*");
+					res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+					res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+					next();
+				},
+			],
+		},
+		port: 3000,
+		open: false,
+		notify: false,
+		ui: false,
+	});
+	cb();
 };
 
 // Watch files
@@ -95,5 +120,5 @@ const watchFiles = () => {
 	watch(libsConfig.css, buildLibsCss);
 };
 
-exports.default = series(buildLibsJs, buildLibsCss, scssToCss, minifyCommonJs, minifyPagesJs, watchFiles);
 exports.build = series(buildLibsJs, buildLibsCss, scssToCss, minifyCommonJs, minifyPagesJs);
+exports.default = series(buildLibsJs, buildLibsCss, scssToCss, minifyCommonJs, minifyPagesJs, serve, watchFiles);
