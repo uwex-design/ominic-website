@@ -78,6 +78,12 @@ var swiper = new Swiper(".swiper_products-featured", {
 		nextEl: ".slide-button-next",
 		prevEl: ".slide-button-prev",
 	},
+	breakpoints: {
+		768: {
+			slidesPerView: "auto",
+			spaceBetween: 0,
+		},
+	},
 });
 
 var swiperGallery = new Swiper(".product-gallery", {
@@ -87,8 +93,8 @@ var swiperGallery = new Swiper(".product-gallery", {
 	createElements: true,
 	watchSlidesProgress: true,
 	navigation: {
-		nextEl: ".btn-gallery_left",
-		prevEl: ".btn-gallery_right",
+		nextEl: ".btn-gallery_right",
+		prevEl: ".btn-gallery_left",
 	},
 	breakpoints: {
 		768: {
