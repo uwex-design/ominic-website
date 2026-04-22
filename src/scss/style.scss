@@ -68,7 +68,7 @@ html.lenis body {
 }
 
 // SEÇÃO DE CARACTERÍSTICAS DO PRODUTO
-.product-features ul {
+.product-features > ul {
 	padding: 0;
 	margin: 0;
 	display: flex;
@@ -153,4 +153,9 @@ html.lenis body {
 		column-count: 3;
 		column-gap: 64px;
 	}
+}
+
+// PRODUTO
+.anexos-list_item {
+	justify-self: stretch;
 }
